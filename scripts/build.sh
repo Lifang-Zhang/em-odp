@@ -1,21 +1,24 @@
 #!/bin/bash
-set -e
 
-ODP_VERSION=master
-INIT_DIRECTORY="${PWD}"
-echo "${INIT_DIRECTORY}"
-BUILD_DIR=$(readlink -e "$(dirname "$0")")/build
+set -o errexit  # abort on nonzero exit status
+set -o nounset  # abort on undeclared variable
+set -o pipefail # don't hide errors within pipes
 
-mkdir "${BUILD_DIR}" -p
-pushd "${BUILD_DIR}"
+#|-- em-odp (repository)
+#      |─ odp
+#      |─ installation
+#      └─ scripts
+script_dir=$(readlink --canonicalize "$(dirname "$0")")
+install_dir=$(dirname "${script_dir}")/installation
+mkdir "${install_dir}" --parents
 
-# Clone and build ODP
-git clone --branch "${ODP_VERSION}" --depth 1 https://github.com/OpenDataPlane/odp.git
-pushd ./odp
+# Clone, build and install ODP which is needed by EM-ODP
+git clone --branch master --depth 1 https://github.com/OpenDataPlane/odp.git
+pushd odp
 ./bootstrap
 
 odp_config_opts=(
-	--prefix="${BUILD_DIR}/odp_install"
+	--prefix="${install_dir}/odp_install"
 	--without-examples
 	--without-tests
 )
@@ -24,15 +27,14 @@ odp_config_opts=(
 make -j "$(nproc)"
 make install
 
-popd && popd
+popd
 
 # Build and install EM-ODP
-pushd "${BUILD_DIR}/../.."
 ./bootstrap
 
 em_config_opts=(
-	--prefix="${BUILD_DIR}/em-odp_install"
-	--with-odp-path="${BUILD_DIR}/odp_install"
+	--prefix="${install_dir}/em-odp_install"
+	--with-odp-path="${install_dir}/odp_install"
 	--enable-check-level=3
 	--enable-esv
 )
@@ -41,4 +43,3 @@ em_config_opts=(
 
 make -j "$(nproc)"
 make install
-#popd
