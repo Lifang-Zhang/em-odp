@@ -51,7 +51,7 @@ jobs:
       run: |
         git clone https://github.com/openeventmachine/ci.git
         echo "./scripts/build.sh" >> ci/docker.sh
-        sudo docker run --privileged --name focal -i -v /dev/hugepages:/dev/hugepages -v ${PWD}:/root/em-odp -w /root/em-odp --shm-size 4g ubuntu:20.04 sh ci/docker.sh   
+        sudo docker run --privileged --name focal -i -v /dev/hugepages:/dev/hugepages -v ${PWD}:/root/em-odp -w /root/em-odp --shm-size 4g ubuntu:20.04 sh ci/docker.sh
 
   Build-focal_clang:
     runs-on: ubuntu-20.04
@@ -66,4 +66,3 @@ jobs:
         echo "apt install clang -y" >> ci/docker.sh
         echo "./scripts/build.sh" >> ci/docker.sh
         sudo docker run --privileged --name focal -i -v /dev/hugepages:/dev/hugepages -v ${PWD}:/root/em-odp -w /root/em-odp --shm-size 4g ubuntu:20.04 sh ci/docker.sh
-
