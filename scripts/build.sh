@@ -1,31 +1,44 @@
 #!/bin/bash
 set -e
 
-#export ODP_VERSION=v1.23.0.0
-export ODP_VERSION=master
+ODP_VERSION=master
+INIT_DIRECTORY="${PWD}"
+echo "${INIT_DIRECTORY}"
+BUILD_DIR=$(readlink -e "$(dirname "$0")")/build
 
-export BUILD_DIR=$(readlink -e $(dirname $0))/build
+mkdir "${BUILD_DIR}" -p
+pushd "${BUILD_DIR}"
 
-mkdir ${BUILD_DIR} -p
-pushd ${BUILD_DIR}
-git clone --branch ${ODP_VERSION} --depth 1 https://github.com/OpenDataPlane/odp.git
+# Clone and build ODP
+git clone --branch "${ODP_VERSION}" --depth 1 https://github.com/OpenDataPlane/odp.git
 pushd ./odp
 ./bootstrap
-./configure \
-	--prefix=${BUILD_DIR}/odp_install \
-	--without-examples \
+
+odp_config_opts=(
+	--prefix="${BUILD_DIR}/odp_install"
+	--without-examples
 	--without-tests
-make -j $(nproc)
+)
+./configure "${odp_config_opts[@]}"
+
+make -j "$(nproc)"
 make install
+
 popd && popd
 
-pushd ${BUILD_DIR}/../..
+# Build and install EM-ODP
+pushd "${BUILD_DIR}/../.."
 ./bootstrap
-./configure \
-	--prefix=${BUILD_DIR}/em-odp_install \
-	--with-odp-path=${BUILD_DIR}/odp_install \
-	--enable-check-level=3 \
+
+em_config_opts=(
+	--prefix="${BUILD_DIR}/em-odp_install"
+	--with-odp-path="${BUILD_DIR}/odp_install"
+	--enable-check-level=3
 	--enable-esv
-make -j $(nproc)
+)
+
+./configure "${em_config_opts[@]}"
+
+make -j "$(nproc)"
 make install
-popd
+#popd
