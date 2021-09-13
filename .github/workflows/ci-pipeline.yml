@@ -13,7 +13,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install asciidoctor cmake doxygen libconfig-dev libssl-dev mscgen graphviz
+        sudo apt-get install cmake doxygen libconfig-dev libssl-dev
     - name: Build
       run: ./scripts/build.sh -d
 
