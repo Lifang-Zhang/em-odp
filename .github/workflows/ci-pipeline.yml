@@ -32,16 +32,18 @@ jobs:
   Run-bionic_gcc:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install automake autoconf libconfig-dev libssl-dev libtool pkg-config hugepages
         sudo pip3 install robotframework
-    - name: Checkout ci repo
+    - name: Checkout EM-ODP
+      uses: actions/checkout@v2
+    - name: Checkout ci
       uses: actions/checkout@v2
       with:
         repository: ${{ github.repository_owner }}/ci
+        clean: false
     - name: Build EM-ODP
       run: ./scripts/build.sh
     - name: Run Robot Tests
