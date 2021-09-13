@@ -41,7 +41,7 @@ jobs:
     - name: Checkout ci repo
       uses: actions/checkout@v2
       with:
-        repository: 'https://github.com/openeventmachine/ci.git'
+        repository: ${{ github.repository_owner }}/ci
     - name: Build EM-ODP
       run: ./scripts/build.sh
     - name: Run Robot Tests
