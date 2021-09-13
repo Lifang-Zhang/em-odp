@@ -39,9 +39,9 @@ jobs:
         sudo apt-get install automake autoconf libconfig-dev libssl-dev libtool pkg-config hugepages
         sudo pip3 install robotframework
     - name: Checkout ci repo
-      - uses: actions/checkout@v2
-        with:
-          repository: 'https://github.com/openeventmachine/ci.git'
+      uses: actions/checkout@v2
+      with:
+        repository: 'https://github.com/openeventmachine/ci.git'
     - name: Build EM-ODP
       run: ./scripts/build.sh
     - name: Run Robot Tests
