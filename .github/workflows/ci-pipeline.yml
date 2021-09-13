@@ -45,6 +45,7 @@ jobs:
         repository: ${{ github.repository_owner }}/ci
         clean: false
         path: ci
+        ref: clean-up
     - name: Build EM-ODP
       run: ./scripts/build.sh
     - name: Run Robot Tests
