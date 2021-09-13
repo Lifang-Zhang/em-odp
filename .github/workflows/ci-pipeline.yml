@@ -27,8 +27,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install automake autoconf libconfig-dev libssl-dev libtool pkg-config hugepages
     - name: Build
-      run: |
-        ./scripts/build.sh
+      run: ./scripts/build.sh
 
   Run-bionic_gcc:
     runs-on: ubuntu-18.04
@@ -39,10 +38,14 @@ jobs:
         sudo apt-get update
         sudo apt-get install automake autoconf libconfig-dev libssl-dev libtool pkg-config hugepages
         sudo pip3 install robotframework
-    - name: Build
+    - name: Checkout ci repo
+      - uses: actions/checkout@v2
+        with:
+          repository: 'https://github.com/openeventmachine/ci.git'
+    - name: Build EM-ODP
+      run: ./scripts/build.sh
+    - name: Run Robot Tests
       run: |
-        ./scripts/build.sh
-        git clone https://github.com/openeventmachine/ci.git
         ./ci/env.sh
         ./ci/test.sh
 
