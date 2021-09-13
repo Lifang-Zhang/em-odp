@@ -49,7 +49,8 @@ jobs:
       run: ./scripts/build.sh
     - name: Run Robot Tests
       run: |
-        ./ci/env.sh
+        sudo sysctl -w vm.nr_hugepages=512
+        cat /proc/meminfo | grep Huge
         ./ci/test.sh
 
   Build-focal_gcc:
