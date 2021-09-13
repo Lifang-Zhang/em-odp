@@ -4,6 +4,21 @@ set -o errexit  # abort on nonzero exit status
 set -o nounset  # abort on undeclared variable
 set -o pipefail # don't hide errors within pipes
 
+make_doxygen=N
+while getopts ":d" opt; do
+	case "${opt}" in
+	d)
+		make_doxygen=Y
+		;;
+	\?)
+		echo "Invalid option: -${OPTARG}" >&2
+		usage
+		exit 1
+		;;
+
+	esac
+done
+
 #|-- em-odp (repository)
 #      |─ odp
 #      |─ installation
@@ -41,5 +56,10 @@ em_config_opts=(
 
 ./configure "${em_config_opts[@]}"
 
-make -j "$(nproc)"
-make install
+# Make doxygen document
+if [[ "${make_doxygen}" = "Y" ]]; then
+	make doxygen-doc
+else
+	make -j "$(nproc)"
+	make install
+fi

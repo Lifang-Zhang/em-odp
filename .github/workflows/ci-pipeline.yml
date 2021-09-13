@@ -15,9 +15,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install asciidoctor cmake doxygen libconfig-dev libssl-dev mscgen graphviz
     - name: Build
-      run: |
-        ./scripts/build.sh
-        make doxygen-doc
+      run: ./scripts/build.sh -d
 
   Build-bionic-gcc:
     runs-on: ubuntu-18.04
