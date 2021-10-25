@@ -1,0 +1,17 @@
+ARG IMAGE=ghcr.io/openeventmachine/em-odp/ubuntu_20.04-with-dependencies:master
+
+FROM $IMAGE
+
+ARG CC_ARG=gcc
+ENV CC=$CC_ARG
+
+RUN mkdir em-odp
+WORKDIR /home/root/em-odp
+
+# Copy em-odp
+COPY . /home/root/em-odp
+
+RUN ./scripts/build.sh
+
+ENTRYPOINT [ "/bin/bash" ]
+CMD ["./scripts/robot_test.sh"]

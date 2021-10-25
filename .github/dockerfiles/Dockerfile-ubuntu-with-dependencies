@@ -1,0 +1,18 @@
+FROM ubuntu:20.04
+
+# hadolint ignore=DL3008, DL3013
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    autoconf \
+    autotools-dev \
+    automake \
+    build-essential \
+    clang \
+    git \
+    libconfig-dev \
+    libssl-dev \
+    libtool \
+    make \
+    pkg-config \
+    python3-pip \
+&& rm -rf /var/lib/apt/lists/* \
+&& pip3 install --no-cache-dir robotframework
