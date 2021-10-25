@@ -11,13 +11,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
-      run: |
-        sudo apt install asciidoctor cmake doxygen libconfig-dev libssl-dev mscgen  graphviz
+      run: >
+        sudo apt install
+        asciidoctor
+        doxygen
+        libconfig-dev
+        mscgen
+        graphviz
 
     - name: Build
       run: |
-        ./scripts/build.sh
-        make doxygen-doc
+        ./scripts/build.sh -d
 
     - name: Before deploy
       run: |
